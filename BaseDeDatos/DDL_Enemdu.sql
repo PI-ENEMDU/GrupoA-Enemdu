@@ -2199,78 +2199,52 @@ SELECT id_hogar,
 -- CREACION DEL USUARIO
 
 DROP  USER IF EXISTS 'user777'@'localhost';
+
 CREATE USER 'user777'@'localhost' IDENTIFIED BY 'contrasenia';
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON enemdu.* TO 'user777'@'localhost';
 
 FLUSH PRIVILEGES;
 
-SELECT * FROM enemdu_vivienda_hogar WHERE id_vivienda = '0101500425010410402';
+-- SELECT v.id_vivienda, va.tipo_viaAcceso, p.tipo_pared, v.estado_pared, ti.tipo_vivienda, t.tipo_techo, v.estado_techo, p2.tipo_piso,
+--       v.estado_piso, tv.tipo_tenencia, v.parentezco_propietario_viv, v.ubicacion_ciudad,C.nombre_ciudad,c2.nombre_canton,
+--       p3.nombre_provincia,p3.poblacion_total,p3.poblacion_mujeres,p3.poblacion_hombres,p3.internet_hogares,p3.PEA,p3.PEI,
+--      p3.media_ingresos_laboral,v.area, v.conglomerado,v.panelm, v.num_vivienda, v.estrato, v.fexp, v.upm, v.periodo, v.mes,
+--       ho.id_hogar, ho.num_hogar, mc.tipo_material,ho.cuartos, ho.dormitorios, ho.cuartos_cocina, ho.cuartos_cocina,
+--       sb.medidor_agua, eb.tipo_eliminacion, a.tipo_alumbrado,ca.tipo_canal, d.tipo_ducha, hh.junta_agua, oa.tipo_origen_agua,
+--       shp.tipo_servicio,srh.tipo_servicio,a2.valor,a2.incluye_agua,a2.incluye_luz,
+--       MAX(CASE WHEN r.id_vehiculo = 1 THEN r.cantidad END) AS cantidad_carros,
+--       MAX(CASE WHEN r.id_vehiculo = 2 THEN r.cantidad END) AS cantidad_motos,
+--       MAX(CASE WHEN rcc.id_combustible = 1 THEN rcc.valor END) AS consumo_super,
+--       MAX(CASE WHEN rcc.id_combustible = 2 THEN rcc.valor END) AS consumo_extra,
+--       MAX(CASE WHEN rcc.id_combustible = 3 THEN rcc.valor END) AS consumo_diese,
+--       MAX(CASE WHEN rcc.id_combustible = 4 THEN rcc.valor END) AS consumo_ecopais,
+--       MAX(CASE WHEN rcc.id_combustible = 5 THEN rcc.valor END) AS consumo_electricidad,
+--       MAX(CASE WHEN rcc.id_combustible = 6 THEN rcc.valor END) AS consumo_gas
+--    FROM viviendas v
+--        INNER JOIN hogares ho ON v.id_vivienda = ho.id_vivienda
+--        INNER JOIN  vias_acceso va on v.id_viaAcceso = va.id_viaAcceso
+--        INNER JOIN paredes p on v.id_pared = p.id_pared
+--        INNER JOIN tipos_vivienda ti ON v.id_tipo_vivienda = ti.id_tipo_vivienda
+--        INNER JOIN techos t on v.id_techo = t.id_techo
+--        INNER JOIN pisos p2 on v.id_piso = p2.id_piso
+--        INNER JOIN tenencia_vivienda tv on v.tipo_tenencia_vivienda = tv.id_tenencia_vivienda
+--        INNER JOIN ciudades c on v.ubicacion_ciudad = c.id_ciudad
+--        INNER JOIN cantones c2 on c.cantones_id_canton = c2.id_canton
+--        INNER JOIN provincias p3 on c2.id_provincia = p3.id_provincia
+--        INNER JOIN materiales_cocinar mc on ho.material_cocinar = mc.id_material
+--        INNER JOIN servicios_basicos sb on ho.id_hogar = sb.id_hogar
+--        INNER JOIN eliminacion_basura eb on sb.id_eliminacion_basura = eb.id_eliminacion_basura
+--        INNER JOIN alumbrados a on sb.id_alumbrado = a.id_alumbrado
+--        INNER JOIN canales_agua ca on sb.id_canal_agua = ca.id_canal
+--        INNER JOIN higiene_hogares hh on ho.id_hogar = hh.id_hogar
+--        INNER JOIN duchas d on hh.id_ducha = d.id_ducha
+--        INNER JOIN origen_agua oa on hh.id_origen_agua = oa.id_origen_agua
+--        INNER JOIN servicios_higienicos sh on hh.id_servicios_higienicos = sh.id_servicios_higienicos
+--        LEFT JOIN servicio_higienico_prestado shp on hh.id_prestamoSH = shp.id_prestamos
+--        LEFT JOIN remplazo_servicio_higienico srh on hh.id_remplazoSH = srh.id_remplazoSH
+--        LEFT JOIN arriendos a2 on ho.id_hogar = a2.id_hogar
+--       LEFT JOIN registro_vehiculos r on ho.id_hogar = r.id_hogar
+--        LEFT JOIN registro_consumo_combustibles rcc on ho.id_hogar = rcc.id_hogar
+-- GROUP BY ho.id_hogar;
 
-SELECT v.area ,p.nombre_provincia AS 'nombre_provincia',p.poblacion_total AS 'poblacion_total_provincia',
-       p.poblacion_mujeres AS 'poblacion_provincia_mujeres',p.poblacion_hombres AS 'poblacion_provincia_hombres',
-       p.internet_hogares AS 'internet_hogares_provincia',p.PEA AS 'pea_provincia', p.PEI AS 'pei_provincia',
-       p.media_ingresos_laboral AS 'media_ingresos_laboral_provinvia',ca.nombre_canton AS 'nombre_canton',
-       v.ubicacion_ciudad, v.conglomerado, v.panelm, v.num_vivienda,ho.num_hogar,via.tipo_viaAcceso,tv.tipo_vivienda,
-       te.tipo_techo, v.estado_techo, pi.tipo_piso, v.estado_piso, pa.tipo_pared, v.estado_pared, ho.cuartos AS 'numero_cuartos',
-       ho.dormitorios AS 'numero_dormitorios', ho.cuartos_negocio, ho.cuartos_cocina, ho.material_cocinar,
-       hig.id_servicios_higienicos AS 'tipo_servicio_higienico', hig.id_remplazoSH AS 'no_servicio_higienico',
-       hig.id_prestamoSH AS 'tipo_instalacion_sanitaria_prestada', oa.tipo_origen_agua, se.medidor_agua, hig.junta_agua,
-       can.tipo_canal, du.tipo_ducha, al.tipo_alumbrado, eb.tipo_eliminacion, tv2.tipo_tenencia, ar.valor, ar.incluye_agua,
-       ar.incluye_luz, v.parentezco_propietario_viv, CASE WHEN reg.id_vehiculo = 1 AND reg.id_hogar = ho.id_hogar THEN reg.cantidad END AS 'numero_carros',
-       CASE WHEN reg.id_vehiculo = 2 AND reg.id_hogar = ho.id_hogar THEN reg.cantidad END AS 'numero_motos',
-       CASE WHEN com.id_combustible = 1 AND com.id_hogar = ho.id_hogar THEN com.valor END AS 'gasto_super'
-FROM viviendas v , tipos_vivienda tv, provincias p, cantones ca, ciudades ci, hogares ho, vias_acceso via, techos te,
-     pisos pi, paredes pa, higiene_hogares hig, servicios_basicos se, origen_agua oa, canales_agua can, duchas du,
-     alumbrados al, eliminacion_basura eb, tenencia_vivienda tv2, arriendos ar, registro_vehiculos reg, registro_consumo_combustibles com
-WHERE v.id_tipo_vivienda = tv.id_tipo_vivienda AND v.ubicacion_ciudad = ci.id_ciudad AND
-      ci.cantones_id_canton = ca.id_canton AND ca.id_provincia = p.id_provincia AND
-      v.id_vivienda = ho.id_vivienda AND v.id_viaAcceso = via.id_viaAcceso AND v.id_techo = te.id_techo AND
-      v.id_piso = pi.id_piso AND v.id_pared = pa.id_pared AND ho.id_hogar = hig.id_hogar AND se.id_hogar = ho.id_hogar
-      AND hig.id_origen_agua = oa.id_origen_agua AND can.id_canal = se.id_canal_agua AND du.id_ducha = hig.id_ducha
-      AND al.id_alumbrado = se.id_alumbrado AND eb.id_eliminacion_basura = se.id_eliminacion_basura AND
-      tv2.id_tenencia_vivienda = v.tipo_tenencia_vivienda AND ar.id_hogar = ho.id_hogar AND reg.id_hogar = ho.id_hogar
-      AND com.id_hogar = ho.id_hogar;
-
-USE enemdu;
-
-SELECT v.id_vivienda, va.tipo_viaAcceso, p.tipo_pared, v.estado_pared, ti.tipo_vivienda, t.tipo_techo, v.estado_techo, p2.tipo_piso,
-       v.estado_piso, tv.tipo_tenencia, v.parentezco_propietario_viv, v.ubicacion_ciudad, v.area, v.conglomerado,
-       v.panelm, v.num_vivienda, v.estrato, v.fexp, v.upm, v.periodo, v.mes, ho.id_hogar, ho.num_hogar, mc.tipo_material,
-       ho.cuartos, ho.dormitorios, ho.cuartos_cocina, ho.cuartos_cocina, sb.medidor_agua, eb.tipo_eliminacion, a.tipo_alumbrado,
-       ca.tipo_canal, d.tipo_ducha, hh.junta_agua, oa.tipo_origen_agua,shp.tipo_servicio,srh.tipo_servicio,a2.valor,
-       a2.incluye_agua,a2.incluye_luz
-
-    FROM viviendas v
-        INNER JOIN hogares ho ON v.id_vivienda = ho.id_vivienda
-        INNER JOIN  vias_acceso va on v.id_viaAcceso = va.id_viaAcceso
-        INNER JOIN paredes p on v.id_pared = p.id_pared
-        INNER JOIN tipos_vivienda ti ON v.id_tipo_vivienda = ti.id_tipo_vivienda
-        INNER JOIN techos t on v.id_techo = t.id_techo
-        INNER JOIN pisos p2 on v.id_piso = p2.id_piso
-        INNER JOIN tenencia_vivienda tv on v.tipo_tenencia_vivienda = tv.id_tenencia_vivienda
-        INNER JOIN materiales_cocinar mc on ho.material_cocinar = mc.id_material
-        INNER JOIN servicios_basicos sb on ho.id_hogar = sb.id_hogar
-        INNER JOIN eliminacion_basura eb on sb.id_eliminacion_basura = eb.id_eliminacion_basura
-        INNER JOIN alumbrados a on sb.id_alumbrado = a.id_alumbrado
-        INNER JOIN canales_agua ca on sb.id_canal_agua = ca.id_canal
-        INNER JOIN higiene_hogares hh on ho.id_hogar = hh.id_hogar
-        INNER JOIN duchas d on hh.id_ducha = d.id_ducha
-        INNER JOIN origen_agua oa on hh.id_origen_agua = oa.id_origen_agua
-        INNER JOIN servicios_higienicos sh on hh.id_servicios_higienicos = sh.id_servicios_higienicos
-        LEFT JOIN servicio_higienico_prestado shp on hh.id_prestamoSH = shp.id_prestamos
-        LEFT JOIN remplazo_servicio_higienico srh on hh.id_remplazoSH = srh.id_remplazoSH
-        LEFT JOIN arriendos a2 on ho.id_hogar = a2.id_hogar
-        LEFT JOIN registro_vehiculos rv on ho.id_hogar = rv.id_hogar;
-
-SELECT *
-    FROM hogares h
-        LEFT JOIN registro_vehiculos rv on h.id_hogar = rv.id_hogar
-
-SELECT hv.id_hogar,
-       SUM(CASE WHEN v.tipo_vehiculo = 1 THEN rv.cantidad ELSE 0 END) AS cantidad_carros,
-       SUM(CASE WHEN v.tipo_vehiculo = 2 THEN rv.cantidad ELSE 0 END) AS cantidad_motos
-FROM hogares hv
-JOIN registro_vehiculos rv ON hv.id_hogar = rv.id_hogar
-JOIN vehiculos v ON rv.id_vehiculo = v.id_vehiculo
-GROUP BY hv.id_hogar;
